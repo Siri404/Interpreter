@@ -33,11 +33,10 @@ public class Interpreter {
         Controller c1=new Controller(r1);
 
         IStmt example2= new CompStmt(new OpenRFile("var_f","file1.txt"),
-                new CompStmt( new ReadFile("var_c", new VarExp("var_f"+2)),
-                        new CompStmt(new IfStmt(new VarExp("var_f"),new CompStmt(new ReadFile("var_c", new VarExp("var_f")),
+                new CompStmt( new ReadFile("var_c", new VarExp("var_f")),
+                        new IfStmt(new VarExp("var_f"),new CompStmt(new ReadFile("var_c", new VarExp("var_f")),
                                 new PrintStmt(new VarExp("var_c"))),
-                                new PrintStmt(new ConstExp(0))),
-                                new CloseRFile(new VarExp("var_f")))));
+                                new PrintStmt(new ConstExp(0)))));
 
         ExeStack<IStmt> exeStack2 = new ExeStack<IStmt>();
         Output<Integer> output2 = new Output<Integer>();
@@ -48,21 +47,22 @@ public class Interpreter {
         Controller c2=new Controller(r2);
 
         IStmt example3 = new CompStmt(
-                new AssignStmt("a",
-                        new ArithExp('+',
-                                new ConstExp(2),
-                                new ArithExp('*',
-                                        new ConstExp(3),
-                                        new ConstExp(5)))),
+                new AssignStmt("v",
+                        new ConstExp(6)),
                 new CompStmt(
-                        new AssignStmt("b",
-                                new ArithExp('+',
-                                        new VarExp("a"),
-                                        new ConstExp(1))),
-                        new CompStmt(
-                                new PrintStmt(new VarExp("b")),
-                                new PrintStmt(new VarExp("a"))
-                        )));
+                        new WhileStmt(
+                                new ArithExp('-',
+                                        new VarExp("v"),
+                                        new ConstExp(4)),
+                                new CompStmt(
+                                    new PrintStmt(new VarExp("v")),
+                                    new AssignStmt("v",
+                                        new ArithExp('-',
+                                            new VarExp("v"),
+                                            new ConstExp(1)))
+                                )),
+                        new PrintStmt(new VarExp("v"))));
+
 
         ExeStack<IStmt> exeStack3 = new ExeStack<IStmt>();
         Output<Integer> output3 = new Output<Integer>();
@@ -76,10 +76,18 @@ public class Interpreter {
                 new AssignStmt("a",
                         new ArithExp('-',
                                 new ConstExp(2),
-                                new ConstExp(2))),
+                                new BooleanExp(
+                                        new ConstExp(2),
+                                        new ConstExp(3),
+                                        "<"
+                                ))),
                 new CompStmt(
                         new IfStmt(
-                                new VarExp("a"),
+                                new BooleanExp(
+                                        new VarExp("a"),
+                                        new ConstExp(1),
+                                        ">"
+                                ),
                                 new AssignStmt("v",
                                         new ConstExp(2)),
                                 new AssignStmt("v",

@@ -4,6 +4,7 @@ import Main.Exceptions.*;
 import Main.Model.ProgramState;
 import Main.Model.Statement.IStmt;
 import Main.Model.Utils.ExeStack;
+import Main.Model.Utils.FileTable;
 import Main.Model.Utils.Heap;
 import Main.Repository.IRepository;
 import java.io.IOException;
@@ -18,13 +19,12 @@ public class Controller {
         this.repository = repository;
     }
 
-    public Map<Integer,Integer> conservativeGarbageCollector(Collection<Integer> symTableValues,
+    private Map<Integer,Integer> conservativeGarbageCollector(Collection<Integer> symTableValues,
                                                              Map<Integer,Integer> heap){
         return heap.entrySet().stream()
                 .filter(e->symTableValues.contains(e.getKey()))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }
-
 
     private ProgramState executeStep(ProgramState programState) throws EmptyStackException, DivisionByZeroException,
             VarNotDefinedException, FileAlreadyOpenException, VarAlreadyDefined, IOException, InvalidFileException
@@ -55,16 +55,30 @@ public class Controller {
             throw new NoProgramInputException("No program input yet\n");
         }
         ProgramState programState = repository.getCurrentProgram();
-        while(true){
-            executeStep(programState);
-            Heap heap = new Heap();
-            heap.putAll(conservativeGarbageCollector(
-                    programState.getSymTable().values(),
-                    programState.getHeap()));
-            programState.setHeap(heap);
-            repository.logPrgStateExec();
+        try {
+            while (true) {
+                executeStep(programState);
+                Heap heap = new Heap();
+                heap.putAll(conservativeGarbageCollector(
+                        programState.getSymTable().values(),
+                        programState.getHeap()));
+                programState.setHeap(heap);
+                repository.logPrgStateExec();
+            }
+        }catch (EmptyStackException e){
+            throw new EmptyStackException("End of program reached!\n");
         }
-
+        finally {
+            FileTable fileTable = programState.getFileTable();
+            fileTable.forEach((key, value) -> {
+                try {
+                    value.y.close();
+                }catch (IOException e){
+                    throw new FileCloseException(e.getMessage());
+                }
+            }
+            );
+        }
     }
 
     public void setCurrentProgramState(ProgramState programState) {

@@ -17,7 +17,7 @@ public class RunExampleCommand extends Command {
         try{
             ctrl.executeAllSteps();
         }catch (EmptyStackException | DivisionByZeroException | VarNotDefinedException | FileAlreadyOpenException |
-                VarAlreadyDefined | IOException | InvalidFileException | NoProgramInputException e) {
+                VarAlreadyDefined | IOException | InvalidFileException | NoProgramInputException | FileCloseException e) {
             System.out.print(e.getMessage());
         }
     }
