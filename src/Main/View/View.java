@@ -65,11 +65,11 @@ public class View {
 //                        System.out.print(e.getMessage());
 //                    }
 //                    break;
-                case 4:
-                    System.out.print("Input program order number:\n");
-                    opt = scanner.nextInt();
-                    controller.setCurrentProgramState(opt);
-                    break;
+//                case 4:
+//                    System.out.print("Input program order number:\n");
+//                    opt = scanner.nextInt();
+//                    controller.setCurrentProgramState(opt);
+//                    break;
                 case 0:
                     return;
             }
@@ -98,7 +98,7 @@ public class View {
         Output<Integer> output3 = new Output<Integer>();
         SymTable<String, Integer> symTable3 = new SymTable<String, Integer>();
         exeStack3.push(example3);
-        ProgramState programState3 = new ProgramState(exeStack3, output3, symTable3, example3);
+        ProgramState programState3 = new ProgramState(exeStack3, output3, symTable3, example3, 1);
         controller.addProgram(programState3);
     }
 
@@ -120,7 +120,7 @@ public class View {
         Output<Integer> output4 = new Output<Integer>();
         SymTable<String, Integer> symTable4 = new SymTable<String, Integer>();
         exeStack4.push(example4);
-        ProgramState programState4 = new ProgramState(exeStack4, output4, symTable4, example4);
+        ProgramState programState4 = new ProgramState(exeStack4, output4, symTable4, example4, 1);
         controller.addProgram(programState4);
     }
 }

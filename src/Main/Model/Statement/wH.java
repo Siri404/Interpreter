@@ -26,7 +26,7 @@ public class wH implements IStmt {
         if(!heap.containsKey(address)) throw new VarNotDefinedException("Invalid address!\n");
         int value = exp.evaluate(symTable, heap);
         heap.replace(address, value);
-        return programState;
+        return null;
     }
 
     @Override

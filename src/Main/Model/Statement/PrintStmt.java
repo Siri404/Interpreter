@@ -27,6 +27,6 @@ public class PrintStmt implements IStmt{
         Heap heap = ps.getHeap();
 
         output.add(exp.evaluate(symTable, heap));
-        return ps;
+        return null;
     }
 }

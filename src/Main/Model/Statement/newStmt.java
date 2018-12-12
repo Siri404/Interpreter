@@ -28,7 +28,7 @@ public class newStmt implements IStmt {
         else{
             symTable.put(var_name, address);
         }
-        return programState;
+        return null;
     }
 
     @Override

@@ -34,6 +34,6 @@ public class CloseRFile implements IStmt {
         bufferedReader.close();
 
         fileTable.remove(bufferedReader_id);
-        return programState;
+        return null;
     }
 }

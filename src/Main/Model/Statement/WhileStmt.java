@@ -23,13 +23,12 @@ public class WhileStmt implements IStmt {
     }
 
     @Override
-    public ProgramState execute(ProgramState prgState) throws DivisionByZeroException, VarNotDefinedException,
-            FileAlreadyOpenException, VarAlreadyDefined, IOException, InvalidFileException {
+    public ProgramState execute(ProgramState prgState) throws DivisionByZeroException, VarNotDefinedException{
         ExeStack<IStmt> exeStack = prgState.getExeStack();
         if(exp.evaluate(prgState.getSymTable(), prgState.getHeap()) != 0) {
             exeStack.push(this);
             exeStack.push(stmt);
         }
-        return prgState;
+        return null;
     }
 }

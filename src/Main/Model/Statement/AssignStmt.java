@@ -32,6 +32,6 @@ public class AssignStmt implements IStmt {
         else{
             st.put(this.varName, this.expr.evaluate(st, heap));
         }
-        return ps;
+        return null;
     }
 }

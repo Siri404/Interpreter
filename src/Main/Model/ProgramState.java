@@ -1,25 +1,77 @@
 package Main.Model;
 
+import Main.Exceptions.*;
 import Main.Model.Statement.IStmt;
 import Main.Model.Utils.*;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Stack;
+
 public class ProgramState {
-    private ExeStack<IStmt> exeStack = new ExeStack<>();
-    private Output<Integer> output = new Output<>();
-    private SymTable<String, Integer> symTable = new SymTable<>();
+    private ExeStack<IStmt> exeStack;
+    private Output<Integer> output;
+    private SymTable<String, Integer> symTable;
     private IStmt program;
     private FileTable fileTable = new FileTable();
     private Heap heap = new Heap();
+    private int ID;
 
 
     public ProgramState(ExeStack<IStmt> exeStack,
                         Output<Integer> output,
                         SymTable<String, Integer> symTable,
-                        IStmt program){
+                        IStmt program,
+                        FileTable fileTable,
+                        Heap heap,
+                        int ID){
         this.exeStack = exeStack;
         this.output = output;
         this.symTable = symTable;
         this.program = program;
+        this.fileTable = fileTable;
+        this.heap=heap;
+        this.ID = ID;
+    }
+
+    public ProgramState(ExeStack<IStmt> exeStack,
+                        Output<Integer> output,
+                        SymTable<String, Integer> symTable,
+                        IStmt program,
+                        int ID){
+        this.exeStack = exeStack;
+        this.output = output;
+        this.symTable = symTable;
+        this.program = program;
+        this.ID = ID;
+    }
+
+    public ProgramState(ProgramState source) {
+        exeStack = new ExeStack<IStmt>();
+        symTable = new SymTable<String, Integer>();
+
+        // copy
+        source.symTable.forEach(symTable::put);
+
+        // reference
+        output = source.output;
+        // reference
+        fileTable = source.fileTable;
+        // reference
+        heap = source.heap;
+        ID = source.ID*10;
+    }
+
+    public ProgramState executeOneStep() throws  EmptyStackException, DivisionByZeroException,
+            VarNotDefinedException, FileAlreadyOpenException, VarAlreadyDefined, IOException, InvalidFileException{
+        if(exeStack.empty()) throw new EmptyStackException("Empty Execution Stack\n");
+        IStmt statement = exeStack.pop();
+        return statement.execute(this);
+
+    }
+
+    public boolean isNotCompleted(){
+        return !exeStack.empty();
     }
 
     public ExeStack<IStmt> getExeStack(){
@@ -46,6 +98,10 @@ public class ProgramState {
         return heap;
     }
 
+    public int getID(){
+        return ID;
+    }
+
     public void setExeStack(ExeStack<IStmt> exeStack){
         this.exeStack = exeStack;
     }
@@ -70,6 +126,10 @@ public class ProgramState {
         this.heap = heap;
     }
 
+    public void setID(int ID){
+        this.ID = ID;
+    }
+
     @Override
     public String toString() {
         return "Execution stack:\n"
@@ -84,6 +144,8 @@ public class ProgramState {
                 + heap.toString()
                 + "\nProgram:\n"
                 + program.toString()
+                + "\nID:"
+                + ID
                 + "\n\n\n";
     }
 }

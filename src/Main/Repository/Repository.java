@@ -1,6 +1,5 @@
 package Main.Repository;
 
-import Main.Exceptions.InvalidProgramException;
 import Main.Model.ProgramState;
 
 import java.io.BufferedWriter;
@@ -8,58 +7,70 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Repository implements IRepository {
-    private ArrayList<ProgramState> programs = new ArrayList<ProgramState>();
+    private List<ProgramState> programList = new ArrayList<ProgramState>();
     private ProgramState currentProgram;
     private String logFilePath;
 
     public Repository(String path, ProgramState program){
         logFilePath = path;
         this.currentProgram = program;
-        programs.add(program);
+        programList.add(program);
     }
 
     public Repository(String path){
         logFilePath = path;
     }
 
-    @Override
-    public ProgramState getCurrentProgram(){
-        return currentProgram;
-    }
+//    @Override
+//    public ProgramState getCurrentProgram(){
+//        return currentProgram;
+//    }
+//
+//    @Override
+//    public void setCurrentProgram(ProgramState program){
+//        this.currentProgram = program;
+//    }
+//
+//    @Override
+//    public ProgramState setCurrentProgram(int opt)throws InvalidProgramException{
+//        if(opt >= programList.size()) {
+//            throw new InvalidProgramException("Invalid program was chosen!\n");
+//        }
+//        this.currentProgram = programList.get(opt);
+//        return currentProgram;
+//    }
+
 
     @Override
-    public void setCurrentProgram(ProgramState program){
-        this.currentProgram = program;
-    }
-
-    @Override
-    public ProgramState setCurrentProgram(int opt)throws InvalidProgramException{
-        if(opt >= programs.size()) {
-            throw new InvalidProgramException("Invalid program was chosen!\n");
-        }
-        this.currentProgram = programs.get(opt);
-        return currentProgram;
+    public List<ProgramState> getProgramList() {
+        return programList;
     }
 
     @Override
     public void addProgram(ProgramState program){
-        programs.add(program);
-        setCurrentProgram(program);
+        programList.add(program);
+        //setCurrentProgram(program);
+    }
+
+    @Override
+    public void setProgramList(List<ProgramState> programList) {
+        this.programList = programList;
     }
 
     @Override
     public int size(){
-        return programs.size();
+        return programList.size();
     }
 
     @Override
-    public void logPrgStateExec() {
+    public void logPrgStateExec(ProgramState programState) {
         PrintWriter logFile = null;
         try{
             logFile = new PrintWriter(new BufferedWriter(new FileWriter(logFilePath, true)));
-            logFile.println(currentProgram);
+            logFile.println(programState);
         }
         catch (IOException e){
             System.out.println(e.getMessage());

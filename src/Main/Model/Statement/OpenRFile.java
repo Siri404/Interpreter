@@ -49,6 +49,6 @@ public class OpenRFile implements IStmt {
         int key = fileTable.add(t);
         symTable.put(var_file_id, key);
 
-        return programState;
+        return null;
     }
 }

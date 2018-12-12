@@ -50,6 +50,6 @@ public class ReadFile implements IStmt {
         else{
             symTable.put(var_name, value);
         }
-        return programState;
+        return null;
     }
 }

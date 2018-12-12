@@ -28,7 +28,7 @@ public class Interpreter {
         Output<Integer> output1 = new Output<Integer>();
         SymTable<String, Integer> symTable1 = new SymTable<String, Integer>();
         exeStack1.push(example1);
-        ProgramState programState1 = new ProgramState(exeStack1, output1, symTable1, example1);
+        ProgramState programState1 = new ProgramState(exeStack1, output1, symTable1, example1, 1);
         Repository r1=new Repository("log.txt", programState1);
         Controller c1=new Controller(r1);
 
@@ -42,7 +42,7 @@ public class Interpreter {
         Output<Integer> output2 = new Output<Integer>();
         SymTable<String, Integer> symTable2 = new SymTable<String, Integer>();
         exeStack2.push(example2);
-        ProgramState programState2 = new ProgramState(exeStack2, output2, symTable2, example2);
+        ProgramState programState2 = new ProgramState(exeStack2, output2, symTable2, example2, 1);
         Repository r2=new Repository("log.txt", programState2);
         Controller c2=new Controller(r2);
 
@@ -68,7 +68,7 @@ public class Interpreter {
         Output<Integer> output3 = new Output<Integer>();
         SymTable<String, Integer> symTable3 = new SymTable<String, Integer>();
         exeStack3.push(example3);
-        ProgramState programState3 = new ProgramState(exeStack3, output3, symTable3, example3);
+        ProgramState programState3 = new ProgramState(exeStack3, output3, symTable3, example3, 1);
         Repository r3=new Repository("log.txt", programState3);
         Controller c3=new Controller(r3);
 
@@ -97,7 +97,7 @@ public class Interpreter {
         Output<Integer> output4 = new Output<Integer>();
         SymTable<String, Integer> symTable4 = new SymTable<String, Integer>();
         exeStack4.push(example4);
-        ProgramState programState4 = new ProgramState(exeStack4, output4, symTable4, example4);
+        ProgramState programState4 = new ProgramState(exeStack4, output4, symTable4, example4, 1);
         Repository r4=new Repository("log.txt", programState4);
         Controller c4=new Controller(r4);
 
@@ -132,9 +132,25 @@ public class Interpreter {
         Output<Integer> output5 = new Output<Integer>();
         SymTable<String, Integer> symTable5 = new SymTable<String, Integer>();
         exeStack5.push(example5);
-        ProgramState programState5 = new ProgramState(exeStack5, output5, symTable5, example5);
+        ProgramState programState5 = new ProgramState(exeStack5, output5, symTable5, example5, 1);
         Repository r5=new Repository("log.txt", programState5);
         Controller c5=new Controller(r5);
+
+        IStmt example6 = new CompStmt(new AssignStmt("v", new ConstExp(10)),
+                new CompStmt(new newStmt("a", new ConstExp(22)),
+                        new CompStmt(new ForkStmt(new CompStmt(new wH("a", new ConstExp(30)),
+                                new CompStmt(new AssignStmt("v", new ConstExp(32)),
+                                        new CompStmt(new PrintStmt(new VarExp("v")),
+                                                new PrintStmt(new rH("a")))))),
+                                new CompStmt(new PrintStmt(new VarExp("v")),
+                                        new PrintStmt(new rH("a"))))));
+        ExeStack<IStmt> exeStack6 = new ExeStack<IStmt>();
+        Output<Integer> output6 = new Output<Integer>();
+        SymTable<String, Integer> symTable6 = new SymTable<String, Integer>();
+        exeStack6.push(example6);
+        ProgramState programState6 = new ProgramState(exeStack6, output6, symTable6, example6, 1);
+        Repository r6 = new Repository("log.txt", programState6);
+        Controller c6 = new Controller(r6);
 
         TextMenu menu=new TextMenu();
         menu.addCommand(new ExitCommand("0","Exit"));
@@ -143,6 +159,7 @@ public class Interpreter {
         menu.addCommand(new RunExampleCommand("3",example3.toString(),c3));
         menu.addCommand(new RunExampleCommand("4",example4.toString(),c4));
         menu.addCommand(new RunExampleCommand("5",example5.toString(),c5));
+        menu.addCommand(new RunExampleCommand("6",example6.toString(),c6));
         menu.showMenu();
     }
 }

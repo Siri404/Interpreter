@@ -21,6 +21,6 @@ public class CompStmt implements IStmt {
         MyStack<IStmt> exeStack = ps.getExeStack();
         exeStack.push(st2);
         exeStack.push(st1);
-        return  ps;
+        return  null;
     }
 }
