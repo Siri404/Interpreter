@@ -7,7 +7,9 @@ import Main.Model.Statement.IStmt;
 import Main.Model.Utils.ExeStack;
 import Main.Model.Utils.FileTable;
 import Main.Model.Utils.Heap;
+import Main.Model.Utils.Observer;
 import Main.Repository.IRepository;
+import Main.Repository.Repository;
 
 import java.io.IOException;
 import java.util.*;
@@ -21,8 +23,9 @@ public class Controller {
     private IRepository repository;
     private ExecutorService executor;
 
-    public Controller(IRepository repository) {
+    Controller(IRepository repository, Observer o) {
         this.repository = repository;
+        ((Repository) repository).registerObserver(o);
     }
 
     private Map<Integer, Integer> conservativeGarbageCollector(List<ProgramState> programStateList,
@@ -36,11 +39,14 @@ public class Controller {
 
     private List<ProgramState> removeCompletedPrograms(List<ProgramState> inProgramList) {
         return inProgramList.stream()
-                .filter(p -> p.isNotCompleted())
+                .filter(ProgramState::isNotCompleted)
                 .collect(Collectors.toList());
     }
 
-    public void oneStepAllPrg(List<ProgramState> programStateList) throws InterruptedException, EmptyStackException {
+    void oneStepAllPrg(List<ProgramState> programStateList) throws InterruptedException, EmptyStackException {
+        if(executor == null){
+            executor = Executors.newFixedThreadPool(2);
+        }
         List<Callable<ProgramState>> callList = programStateList.stream()
                 .map((programState) -> (Callable<ProgramState>) (() -> {
                     return programState.executeOneStep();
@@ -116,6 +122,9 @@ public class Controller {
 
     public void addProgram(ProgramState program) {
         this.repository.addProgram(program);
+    }
+    public IRepository getRepo(){
+        return repository;
     }
 
 }

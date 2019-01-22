@@ -1,6 +1,8 @@
 package Main.Repository;
 
 import Main.Model.ProgramState;
+import Main.Model.Utils.Observable;
+import Main.Model.Utils.Observer;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
@@ -9,15 +11,22 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Repository implements IRepository {
+public class Repository extends Observable implements IRepository, Observer {
     private List<ProgramState> programList = new ArrayList<ProgramState>();
     private ProgramState currentProgram;
     private String logFilePath;
 
     public Repository(String path, ProgramState program){
+        super();
         logFilePath = path;
         this.currentProgram = program;
         programList.add(program);
+    }
+
+    @Override
+    public void update() {
+        // received update from one of the program states, notify the Observers higher up of the change
+        notifyObservers();
     }
 
     public Repository(String path){
