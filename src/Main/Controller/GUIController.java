@@ -37,10 +37,13 @@ public class GUIController implements Observer{
                                         new CloseRFile(new VarExp("var_f")))
                         )));
 
-        example2= new CompStmt(new OpenRFile("var_f","file1.txt"),
-                new CompStmt( new ReadFile("var_c", new VarExp("var_f")),
-                        new IfStmt(new VarExp("var_f"),new CompStmt(new ReadFile("var_c", new VarExp("var_f")),
-                                new PrintStmt(new VarExp("var_c"))),
+        example2= new CompStmt(
+                new OpenRFile("var_f","file1.txt"),
+                new CompStmt(
+                        new ReadFile("var_c", new VarExp("var_f")),
+                        new IfStmt(new VarExp("var_f"),new CompStmt(
+                                    new ReadFile("var_c", new VarExp("var_f")),
+                                    new PrintStmt(new VarExp("var_c"))),
                                 new PrintStmt(new ConstExp(0)))));
 
         example3 = new CompStmt(
@@ -83,23 +86,17 @@ public class GUIController implements Observer{
                         new PrintStmt(new VarExp("v"))));
 
         example5 = new CompStmt(
-                new AssignStmt("v",
-                        new ConstExp(10)),
+                new AssignStmt("v", new ConstExp(10)),
                 new CompStmt(
-                        new newStmt("v",
-                                new ConstExp(20)),
+                        new newStmt("v", new ConstExp(20)),
                         new CompStmt(
-                                new newStmt("a",
-                                        new ConstExp(22)),
+                                new newStmt("a", new ConstExp(22)),
                                 new CompStmt(
-                                        new wH("a",
-                                                new ConstExp(30)),
+                                        new wH("a", new ConstExp(30)),
                                         new CompStmt(
-                                                new PrintStmt(
-                                                        new VarExp("a")),
+                                                new PrintStmt(new VarExp("a")),
                                                 new CompStmt(
-                                                        new PrintStmt(
-                                                                new rH("a")
+                                                        new PrintStmt(new rH("a")
                                                         ),
                                                         new AssignStmt("a", new ConstExp(0))
                                                 )
@@ -109,49 +106,74 @@ public class GUIController implements Observer{
                 )
         );
 
-        example6 = new CompStmt(new AssignStmt("v", new ConstExp(10)),
-                new CompStmt(new newStmt("a", new ConstExp(22)),
-                        new CompStmt(new ForkStmt(new CompStmt(new wH("a", new ConstExp(30)),
-                                new CompStmt(new AssignStmt("v", new ConstExp(32)),
-                                        new CompStmt(new PrintStmt(new VarExp("v")),
-                                                new PrintStmt(new rH("a")))))),
-                                new CompStmt(new PrintStmt(new VarExp("v")),
+        example6 = new CompStmt(
+                new AssignStmt("v", new ConstExp(10)),
+                new CompStmt(
+                        new newStmt("a", new ConstExp(22)),
+                        new CompStmt(
+                                new ForkStmt(new CompStmt(
+                                        new wH("a", new ConstExp(30)),
+                                        new CompStmt(
+                                                new AssignStmt("v", new ConstExp(32)),
+                                                new CompStmt(
+                                                        new PrintStmt(new VarExp("v")),
+                                                        new PrintStmt(new rH("a")))))),
+                                new CompStmt(
+                                        new PrintStmt(new VarExp("v")),
                                         new PrintStmt(new rH("a"))))));
 
-        example7 = new CompStmt(new newStmt("v1", new ConstExp(20)),
-                new CompStmt(new newStmt("v2", new ConstExp(30)),
-                        new CompStmt(new newLockStmt("x"),
-                                new CompStmt(new ForkStmt(
-                                        new CompStmt(new ForkStmt(
-                                        new CompStmt(new Lock("x"),
-                                                new CompStmt(new wH("v1", new ArithExp('-',new rH("v1"), new ConstExp(1))),
-                                                new Unlock("x")))),
-                                        new CompStmt(new Lock("x"),
-                                                new CompStmt(new wH("v1", new ArithExp('+', new rH("v1"), new ConstExp(1))),
-                                                        new Unlock("x"))))),
-                                        new CompStmt(new newLockStmt("q"),
-                                                new CompStmt(new ForkStmt(
-                                                        new CompStmt(new ForkStmt(
-                                                                new CompStmt(new Lock("q"),
-                                                                        new CompStmt(new wH("v2", new ArithExp('+', new rH("v2"), new ConstExp(5))),
-                                                                                new Unlock("q")))
-                                                        ),
-                                                                new CompStmt(new AssignStmt("m",new ConstExp(100)),
-                                                                        new CompStmt(new Lock("q"),
-                                                                                new CompStmt(new wH("v2", new ArithExp('+', new rH("v2"), new ConstExp(1))),
-                                                                                        new Unlock("q"))
-                                                                                )))),
-                                                        new CompStmt(new AssignStmt("z", new ConstExp(200)),
-                                                                new CompStmt(new AssignStmt("z", new ConstExp(300)),
-                                                                new CompStmt(new AssignStmt("z", new ConstExp(400)),
-                                                                new CompStmt(new Lock("x"),
-                                                                        new CompStmt(new PrintStmt(new rH("v1")),
-                                                                                new CompStmt(new Unlock("x"),
-                                                                                        new CompStmt(new Lock("q"),
-                                                                                                new CompStmt(new PrintStmt(new rH("v2")),
-                                                                                                        new Unlock("q")))))))))
-                                                )))
-                                        )));
+        example7 = new CompStmt(
+                new newStmt("v1", new ConstExp(20)),
+                new CompStmt(
+                        new newStmt("v2", new ConstExp(30)),
+                        new CompStmt(
+                                new newLockStmt("x"),
+                                new CompStmt(
+                                        new ForkStmt(new CompStmt(
+                                                new ForkStmt(new CompStmt(
+                                                        new Lock("x"),
+                                                        new CompStmt(
+                                                                new wH("v1", new ArithExp('-',new rH("v1"), new ConstExp(1))),
+                                                                new Unlock("x")))),
+                                                new CompStmt(
+                                                        new Lock("x"),
+                                                        new CompStmt(
+                                                                new wH("v1", new ArithExp('+', new rH("v1"), new ConstExp(1))),
+                                                                new Unlock("x"))))),
+                                        new CompStmt(
+                                                new newLockStmt("q"),
+                                                new CompStmt(
+                                                        new ForkStmt(new CompStmt(
+                                                                new ForkStmt(
+                                                                new CompStmt(
+                                                                        new Lock("q"),
+                                                                        new CompStmt(
+                                                                                new wH("v2", new ArithExp('+', new rH("v2"), new ConstExp(5))),
+                                                                                new Unlock("q")))),
+                                                                new CompStmt(
+                                                                        new AssignStmt("m",new ConstExp(100)),
+                                                                        new CompStmt(
+                                                                                new Lock("q"),
+                                                                                new CompStmt(
+                                                                                        new wH("v2", new ArithExp('+', new rH("v2"), new ConstExp(1))),
+                                                                                        new Unlock("q")))))),
+                                                        new CompStmt(
+                                                                new AssignStmt("z", new ConstExp(200)),
+                                                                new CompStmt(
+                                                                        new AssignStmt("z", new ConstExp(300)),
+                                                                        new CompStmt(
+                                                                                new AssignStmt("z", new ConstExp(400)),
+                                                                                new CompStmt(
+                                                                                        new Lock("x"),
+                                                                                        new CompStmt(
+                                                                                                new PrintStmt(new rH("v1")),
+                                                                                                new CompStmt(
+                                                                                                        new Unlock("x"),
+                                                                                                        new CompStmt(
+                                                                                                                new Lock("q"),
+                                                                                                                new CompStmt(
+                                                                                                                        new PrintStmt(new rH("v2")),
+                                                                                                                        new Unlock("q")))))))))))))));
 
         example8 = new CompStmt(
                 new AssignStmt("v", new ConstExp(20)),
