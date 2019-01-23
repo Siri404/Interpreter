@@ -9,12 +9,14 @@ import java.util.HashMap;
 import java.util.Stack;
 
 public class ProgramState {
+    private static int nextID = 1;
     private ExeStack<IStmt> exeStack;
     private Output<Integer> output;
     private SymTable<String, Integer> symTable;
     private IStmt program;
     private FileTable fileTable = new FileTable();
     private Heap heap = new Heap();
+    private LockTable lockTable = new LockTable();
     private int ID;
 
 
@@ -24,26 +26,28 @@ public class ProgramState {
                         IStmt program,
                         FileTable fileTable,
                         Heap heap,
-                        int ID){
+                        LockTable lockTable){
         this.exeStack = exeStack;
         this.output = output;
         this.symTable = symTable;
         this.program = program;
         this.fileTable = fileTable;
         this.heap=heap;
-        this.ID = ID;
+        this.lockTable = lockTable;
+        this.ID = ProgramState.nextID;
+        ProgramState.nextID +=1;
     }
 
     public ProgramState(ExeStack<IStmt> exeStack,
                         Output<Integer> output,
                         SymTable<String, Integer> symTable,
-                        IStmt program,
-                        int ID){
+                        IStmt program){
         this.exeStack = exeStack;
         this.output = output;
         this.symTable = symTable;
         this.program = program;
-        this.ID = ID;
+        this.ID = ProgramState.nextID;
+        ProgramState.nextID +=1;
     }
 
     public ProgramState(ProgramState source) {
@@ -59,7 +63,10 @@ public class ProgramState {
         fileTable = source.fileTable;
         // reference
         heap = source.heap;
-        ID = source.ID*10;
+        //reference
+        lockTable = source.lockTable;
+        ID = ProgramState.nextID;
+        ProgramState.nextID +=1;
     }
 
     public ProgramState executeOneStep() throws  EmptyStackException, DivisionByZeroException,
@@ -96,6 +103,10 @@ public class ProgramState {
 
     public Heap getHeap() {
         return heap;
+    }
+
+    public LockTable getLockTable() {
+        return lockTable;
     }
 
     public int getID(){
@@ -142,6 +153,8 @@ public class ProgramState {
                 + fileTable.toString()
                 + "\nHeap:\n"
                 + heap.toString()
+                + "\nLock Table:\n"
+                + lockTable.toString()
                 + "\nProgram:\n"
                 + program.toString()
                 + "\nID:"
